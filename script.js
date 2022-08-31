@@ -1,44 +1,42 @@
 document.addEventListener("DOMContentLoaded", () => {
   let tarjetas = [
     {
-      name: "German Shepherd",
-      img:
+      nombre: "German Shepherd",
+      imagen:
         "images/german_shepherd.png"
     },
     {
-      name: "Labradoodle",
-      img:
+      nombre: "Labradoodle",
+      imagen:
         "images/labradoodle.png"
     },
     {
-      name: "Shetland Sheepdog",
-      img:
+      nombre: "Shetland Sheepdog",
+      imagen:
         "images/shetland_sheepdog.png"
     },
     {
-      name: "Spaniel English Springer",
-      img:
+      nombre: "Spaniel English Springer",
+      imagen:
         "images/spaniel_english_springer.png"
     },
     {
-      name: "Welsh Corgi Pembroke",
-      img:
+      nombre: "Welsh Corgi Pembroke",
+      imagen:
         "images/welsh_corgi_pembroke.png"
     },
     {
-      name: "White Swiss Shepherd",
-      img:
+      nombre: "White Swiss Shepherd",
+      imagen:
         "images/white_swiss_shepherd.png"
     }
   ];
-  tarjetas = tarjetas.concat(tarjetas); //suplicamos loss elementos del array
-  tarjetas = revolverTarjetas(tarjetas)
-
+  tarjetas = tarjetas.concat(tarjetas); //duplicamos loss elementos del array
 
   const grid = document.getElementById("grid");
   var cartasSeleccionadas = []; //va a ser un array de los índices de cada tarjeta seleccionada
   var contadorGanados = 0;
-  const resultado = document.getElementById("result");
+  const resultado = document.getElementById("resultado");
 
   https://dev.to/codebubb/how-to-shuffle-an-array-in-javascript-2ikj
   //este es el algoritmo de de mezcla Fisher-Yates
@@ -52,33 +50,34 @@ document.addEventListener("DOMContentLoaded", () => {
     return array;
   }
 
+  tarjetas = revolverTarjetas(tarjetas);
+
   //armamos el tablero de forma dinamica
   function armarTablero() {
     for (let i = 0; i < tarjetas.length; i++) {
       //creamos un elemento de tipo <img />
-      const card = document.createElement("img");
+      const tarjeta = document.createElement("img");
       //seteamos la imagen de patron por defecto
-      card.setAttribute(
+      tarjeta.setAttribute(
         "src",
         "images/pattern.png"
       );
       //a cada imagen le asignamos un atributo único que va a corresponder con el índice del objeto de la raza en el array de tarjetas
-      card.setAttribute("data-index", i);
-      //esto es para agregar las clases al objeto "card"
-      card.classList.add("card", "image");
-      // card.setAttribute("id", "image");
+      tarjeta.setAttribute("data-index", i);
+      //esto es para agregar las clases al objeto "tarjeta"
+      tarjeta.classList.add("imagen");
       // para reconocer cada tarjeta asignamos el nombre, el nombre se corresponde al nombre de la raza del perro
-      card.setAttribute("name", tarjetas[i].name);
+      tarjeta.setAttribute("name", tarjetas[i].nombre);
       // agregamos el evento click, porque queremos que reaccione cuando se haga click en cada tarjeta
-      card.addEventListener("click", flipCard);
+      tarjeta.addEventListener("click", voltearTarjeta);
       // agregamos el elemento creado a la grilla
-      grid.appendChild(card);
+      grid.appendChild(tarjeta);
     }
   }
 
   function validarTarjetasSeleccionadas() {
     //obtenemos un array de todas las imágenes
-    const cards = document.querySelectorAll("img");
+    const listaTarjetas = document.querySelectorAll("img");
     //obtenemos los índices de las tarjetas seleccionadass
     const primeraTarjetaSeleccionadaIndex = cartasSeleccionadas[0];
     const segundaTarjetaSeleccionadaIndex = cartasSeleccionadas[1];
@@ -86,37 +85,37 @@ document.addEventListener("DOMContentLoaded", () => {
       //en caso de seleccionar la misma tarjeta, mostrar una alerta
       alert("¡Es la misma tarjeta!");
       //ponemos d vuelva a ambas la imagen del patron por defecto
-      cards[primeraTarjetaSeleccionadaIndex].setAttribute(
+      listaTarjetas[primeraTarjetaSeleccionadaIndex].setAttribute(
         "src",
         "images/pattern.png"
       );
-      cards[segundaTarjetaSeleccionadaIndex].setAttribute(
+      listaTarjetas[segundaTarjetaSeleccionadaIndex].setAttribute(
         "src",
         "images/pattern.png"
       );
-    } else if (cards[primeraTarjetaSeleccionadaIndex].name === cards[segundaTarjetaSeleccionadaIndex].name) {
+    } else if (listaTarjetas[primeraTarjetaSeleccionadaIndex].name === listaTarjetas[segundaTarjetaSeleccionadaIndex].name) {
       //el atributo "name" guarda el nombre de la raza, si son iguales entonces es correcto
       alert("¡Correcto!");
       //cambiar la imagen por la del patron de finalizacion
-      cards[primeraTarjetaSeleccionadaIndex].setAttribute(
+      listaTarjetas[primeraTarjetaSeleccionadaIndex].setAttribute(
         "src",
         "images/pattern-inverted.png"
       );
-      cards[segundaTarjetaSeleccionadaIndex].setAttribute(
+      listaTarjetas[segundaTarjetaSeleccionadaIndex].setAttribute(
         "src",
         "images/pattern-inverted.png"
       );
       //evitamos que se pueda volver a hacer click en las mismas
-      cards[primeraTarjetaSeleccionadaIndex].removeEventListener("click", flipCard);
-      cards[segundaTarjetaSeleccionadaIndex].removeEventListener("click", flipCard);
+      listaTarjetas[primeraTarjetaSeleccionadaIndex].removeEventListener("click", voltearTarjeta);
+      listaTarjetas[segundaTarjetaSeleccionadaIndex].removeEventListener("click", voltearTarjeta);
       contadorGanados = contadorGanados + 2; //sumamos 2 porque fueron 2 las cartas correctas
     } else {
       //si no coinciden entonces se vuelve a poner el patron por defecto para ocultar la imagen de los perros
-      cards[primeraTarjetaSeleccionadaIndex].setAttribute(
+      listaTarjetas[primeraTarjetaSeleccionadaIndex].setAttribute(
         "src",
         "images/pattern.png"
       );
-      cards[segundaTarjetaSeleccionadaIndex].setAttribute(
+      listaTarjetas[segundaTarjetaSeleccionadaIndex].setAttribute(
         "src",
         "images/pattern.png"
       );
@@ -124,20 +123,20 @@ document.addEventListener("DOMContentLoaded", () => {
     //limpiamos el array de cartas seleccionadas para prepararlo para las siguientes tarjetas seleccionadas
     cartasSeleccionadas = [];
     if (contadorGanados === tarjetas.length) {
-      resultado.textContent = "¡Felicidades! ¡Ganaste!";
+      resultado.textContent = "¡Felicidades! ¡Los encontraste a todos!";
     } else {
-      resultado.textContent = contadorGanados / 2; //hay 2n pares, por ende hay n elementos distintos
+      resultado.textContent = (contadorGanados / 2) + " razas encontradas"; //hay 2n pares, por ende hay n elementos distintos
     }
   }
 
   /* Metodo para cambiar la imagen */
-  function flipCard() {
+  function voltearTarjeta() {
     //obtenemos el índice del array de perros
     let index = this.getAttribute("data-index");
     //guardamos en el array cuál es el índice de la carta seleccionada
     cartasSeleccionadas.push(index);
     //cambiamos la imagen por la del perro que se encuentre en esa misma posicion en el array, en lugar del patro por defecto
-    this.setAttribute("src", tarjetas[index].img);
+    this.setAttribute("src", tarjetas[index].imagen);
     //cada 2 tarjetas se hacen las validaciones
     if (cartasSeleccionadas.length === 2) {
       setTimeout(validarTarjetasSeleccionadas, 500);
