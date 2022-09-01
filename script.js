@@ -75,6 +75,20 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  /* Metodo para cambiar la imagen */
+  function voltearTarjeta() {
+    //obtenemos el índice del array de perros
+    let index = this.getAttribute("data-index");
+    //guardamos en el array cuál es el índice de la carta seleccionada
+    cartasSeleccionadas.push(index);
+    //cambiamos la imagen por la del perro que se encuentre en esa misma posicion en el array, en lugar del patrón por defecto
+    this.setAttribute("src", tarjetas[index].imagen);
+    //cada 2 tarjetas se hacen las validaciones
+    if (cartasSeleccionadas.length === 2) {
+      setTimeout(validarTarjetasSeleccionadas, 500);
+    }
+  }
+
   function validarTarjetasSeleccionadas() {
     //obtenemos un array de todas las imágenes
     const listaTarjetas = document.querySelectorAll("img");
@@ -128,20 +142,6 @@ document.addEventListener("DOMContentLoaded", () => {
       resultado.textContent = (contadorGanados / 2) + " razas encontradas"; //hay 2n pares, por ende hay n elementos distintos
     }
   }
-
-  /* Metodo para cambiar la imagen */
-  function voltearTarjeta() {
-    //obtenemos el índice del array de perros
-    let index = this.getAttribute("data-index");
-    //guardamos en el array cuál es el índice de la carta seleccionada
-    cartasSeleccionadas.push(index);
-    //cambiamos la imagen por la del perro que se encuentre en esa misma posicion en el array, en lugar del patro por defecto
-    this.setAttribute("src", tarjetas[index].imagen);
-    //cada 2 tarjetas se hacen las validaciones
-    if (cartasSeleccionadas.length === 2) {
-      setTimeout(validarTarjetasSeleccionadas, 500);
-    }
-  }
-
+  
   armarTablero();
 });
